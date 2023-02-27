@@ -1,0 +1,72 @@
+<html>
+ <head>
+    
+ </head>
+ <body>
+    <h1>Страница о погоде</h1>
+    <p>Выберете действие</p>
+
+    <div>
+        <button onclick="getAll()">Получить данные</button>
+        <button onclick="makeEmpty()">Очистеть данные</button>    
+    </div>
+
+    <p>Список данных:</p>
+    <div id="your-data"></div>
+
+<script>
+    var arr = new Array();
+
+    function printData() {
+        var links = document.getElementById('your-data');
+        arr.forEach(function (v) {
+            if (typeof v == 'object'){
+                v.forEach(function (v) {
+                    if (typeof v == 'object'){
+                        var a = document.createElement('p');
+                        a.id = v.id;
+                        a.textContent = 
+                            'id: ' + v.id
+                            +   '; date: ' + v.date
+                            +   '; degree: ' + v.degree
+                            +   '; location: ' + v.location
+                        links.appendChild(a);
+                    }
+                })
+            }
+        })
+    }
+
+
+    function makeEmpty() {
+        arr = new Array();
+        var a = document.getElementById('your-data');
+        while (a.firstChild) {
+            a.removeChild(a.firstChild);
+        }
+    }
+
+    function getAll() {
+        makeEmpty();
+        fetch('https://localhost:7286/WeatherForecast')
+        .then(
+            function (responce) {
+                if (response.status i== 200) {
+                    console.log('Произошла ошибка. Status Code: '  + response.status);
+                    return;
+                }
+                response.json().then(function (data){
+                   console.log(data);
+                   arr[data.llenght] = data;
+                   printData();     
+                });
+            }
+        )
+        .catch(function (err){
+            console.log('Fetch Error: ' err);
+        });
+    }
+</script>
+
+ </body>
+</html>
